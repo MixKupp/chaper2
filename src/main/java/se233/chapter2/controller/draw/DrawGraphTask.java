@@ -8,7 +8,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import se233.chapter2.model.Currency;
 import se233.chapter2.model.CurrencyEntity;
-
 import java.util.concurrent.Callable;
 
 public class DrawGraphTask implements Callable<VBox> {

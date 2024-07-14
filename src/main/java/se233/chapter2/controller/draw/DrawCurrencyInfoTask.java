@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import se233.chapter2.model.Currency;
-
 import java.util.concurrent.Callable;
 
 public class DrawCurrencyInfoTask implements Callable<VBox> {

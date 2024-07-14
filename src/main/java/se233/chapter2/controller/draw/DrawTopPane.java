@@ -7,11 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import se233.chapter2.controller.AllEventHandler;
-
 import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
 
-// Convert the two sub-panes in the CurrencyPane class into Callable objects - START
 public class DrawTopPane extends FlowPane implements Callable<FlowPane> {
     private Button refresh;
     private Button add;

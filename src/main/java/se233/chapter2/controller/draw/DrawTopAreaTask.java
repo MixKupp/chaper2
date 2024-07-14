@@ -8,10 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import se233.chapter2.controller.AllEventHandler;
 import se233.chapter2.model.Currency;
-
 import java.util.concurrent.Callable;
 
-// Convert the two sub-panes in the CurrencyPane class into Callable objects - START
 public class DrawTopAreaTask implements Callable<HBox> {
     private Currency currency;
     private Button watch;

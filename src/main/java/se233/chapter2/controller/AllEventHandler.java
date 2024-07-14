@@ -6,7 +6,6 @@ import org.json.JSONException;
 import se233.chapter2.Launcher;
 import se233.chapter2.model.Currency;
 import se233.chapter2.model.CurrencyEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,16 +43,16 @@ public class AllEventHandler {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-            // Implement error handling to notify the user if an invalid currency short code is entered - START
         } catch (JSONException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setContentText("Invalid currency code please try again.");
+            alert.setContentText("Invalid currency code.");
             alert.setHeaderText(null);
             alert.setGraphic(null);
             alert.showAndWait();
-            // Implement error handling to notify the user if an invalid currency short code is entered - END
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void onDelete(String code) {
@@ -113,7 +112,6 @@ public class AllEventHandler {
         }
     }
 
-    // Add unwatch button - START
     public static void onUnwatch(String code) {
         try {
             List<Currency> currencyList = Launcher.getCurrencyList();
@@ -136,9 +134,7 @@ public class AllEventHandler {
             e.printStackTrace();
         }
     }
-    // Add unwatch button - END
 
-    // Design and implement components that enable users to configure the base currency - START
     public static void onConfig() {
         try {
             TextInputDialog dialog = new TextInputDialog();
@@ -165,5 +161,4 @@ public class AllEventHandler {
             e.printStackTrace();
         } catch (IndexOutOfBoundsException e) {}
     }
-    // Design and implement components that enable users to configure the base currency - END
 }
