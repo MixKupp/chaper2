@@ -14,7 +14,8 @@ public class CurrencyParentPane extends FlowPane {
 
     public void refreshPane(List<Currency> currencyList) throws ExecutionException, InterruptedException {
         this.getChildren().clear();
-        for (int i = 0 ; i < currencyList.size() ; i++) {
+
+        for (int i = 0; i < currencyList.size(); i++) {
             CurrencyPane cp = new CurrencyPane(currencyList.get(i));
             this.getChildren().add(cp);
         }

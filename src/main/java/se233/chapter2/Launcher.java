@@ -10,7 +10,6 @@ import se233.chapter2.model.Currency;
 import se233.chapter2.view.CurrencyParentPane;
 import se233.chapter2.view.TopPane;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -20,6 +19,39 @@ public class Launcher extends Application {
     private static TopPane topPane;
     private static CurrencyParentPane currencyParentPane;
     private static List<Currency> currencyList;
+    private static String base = "THB";
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void setPrimaryStage(Stage primaryStage) {
+        Launcher.primaryStage = primaryStage;
+    }
+
+    public static FlowPane getMainPane() {
+        return mainPane;
+    }
+
+    public static void setMainPane(FlowPane mainPane) {
+        Launcher.mainPane = mainPane;
+    }
+
+    public static TopPane getTopPane() {
+        return topPane;
+    }
+
+    public static void setTopPane(TopPane topPane) {
+        Launcher.topPane = topPane;
+    }
+
+    public static CurrencyParentPane getCurrencyParentPane() {
+        return currencyParentPane;
+    }
+
+    public static void setCurrencyParentPane(CurrencyParentPane currencyParentPane) {
+        Launcher.currencyParentPane = currencyParentPane;
+    }
 
     public static List<Currency> getCurrencyList() {
         return currencyList;
@@ -29,13 +61,21 @@ public class Launcher extends Application {
         Launcher.currencyList = currencyList;
     }
 
+    public static String getBase() {
+        return base;
+    }
+
+    public static void setBase(String base) {
+        Launcher.base = base;
+    }
+
     @Override
-    public void start(Stage stage) throws IOException, ExecutionException, InterruptedException {
+    public void start(Stage stage) throws ExecutionException, InterruptedException {
         primaryStage = stage;
         primaryStage.setTitle("Currency Watcher");
         primaryStage.setResizable(false);
         currencyList = Initialize.initializeApp();
-        iniMainPane();
+        initMainPane();
         Scene mainScene = new Scene(mainPane);
         primaryStage.setScene(mainScene);
         primaryStage.show();
@@ -45,7 +85,7 @@ public class Launcher extends Application {
         th.start();
     }
 
-    public void iniMainPane() throws ExecutionException, InterruptedException {
+    public void initMainPane() throws ExecutionException, InterruptedException {
         mainPane = new FlowPane();
         topPane = new TopPane();
         currencyParentPane = new CurrencyParentPane(currencyList);

@@ -1,17 +1,18 @@
 package se233.chapter2.controller;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import org.json.JSONException;
 import se233.chapter2.Launcher;
 import se233.chapter2.model.Currency;
 import se233.chapter2.model.CurrencyEntity;
 
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-public class AllEventHandler  {
+public class AllEventHandler {
     public static void onRefresh() {
         try {
             Launcher.refreshPane();
@@ -23,15 +24,16 @@ public class AllEventHandler  {
     public static void onAdd() {
         try {
             TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Add currency");
+            dialog.setTitle("Add Currency");
             dialog.setContentText("Currency code:");
             dialog.setHeaderText(null);
             dialog.setGraphic(null);
             Optional<String> code = dialog.showAndWait();
+
             if (code.isPresent()) {
                 List<Currency> currencyList = Launcher.getCurrencyList();
-                Currency c = new Currency(code.get());
-                List<CurrencyEntity> cList = FetchData.fetchRange(c.getShortcode(), 8);
+                Currency c = new Currency(code.get().toUpperCase());
+                List<CurrencyEntity> cList = FetchData.fetchRange(Launcher.getBase(), c.getShortcode(), 30);
                 c.setHistorical(cList);
                 c.setCurrency(cList.get(cList.size() - 1));
                 currencyList.add(c);
@@ -42,16 +44,24 @@ public class AllEventHandler  {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            // Implement error handling to notify the user if an invalid currency short code is entered - START
+        } catch (JSONException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Invalid currency code please try again.");
+            alert.setHeaderText(null);
+            alert.setGraphic(null);
+            alert.showAndWait();
+            // Implement error handling to notify the user if an invalid currency short code is entered - END
+        } catch (IndexOutOfBoundsException e) {}
     }
 
     public static void onDelete(String code) {
         try {
             List<Currency> currencyList = Launcher.getCurrencyList();
             int index = -1;
-            for (int i = 0 ; i < currencyList.size() ; i++) {
+
+            for (int i = 0; i < currencyList.size(); i++) {
                 if (currencyList.get(i).getShortcode().equals(code)) {
                     index = i;
                     break;
@@ -73,7 +83,7 @@ public class AllEventHandler  {
         try {
             List<Currency> currencyList = Launcher.getCurrencyList();
             int index = -1;
-            for (int i = 0 ; i < currencyList.size() ; i++) {
+            for (int i = 0; i < currencyList.size(); i++) {
                 if (currencyList.get(i).getShortcode().equals(code)) {
                     index = i;
                     break;
@@ -93,6 +103,8 @@ public class AllEventHandler  {
                     Launcher.setCurrencyList(currencyList);
                     Launcher.refreshPane();
                 }
+                Launcher.setCurrencyList(currencyList);
+                Launcher.refreshPane();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -100,4 +112,58 @@ public class AllEventHandler  {
             e.printStackTrace();
         }
     }
+
+    // Add unwatch button - START
+    public static void onUnwatch(String code) {
+        try {
+            List<Currency> currencyList = Launcher.getCurrencyList();
+            int index = -1;
+            for (int i = 0; i < currencyList.size(); i++) {
+                if (currencyList.get(i).getShortcode().equals(code)) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1) {
+                currencyList.get(index).setWatch(false);
+                currencyList.get(index).setWatchRate(0.0);
+                Launcher.setCurrencyList(currencyList);
+                Launcher.refreshPane();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+    // Add unwatch button - END
+
+    // Design and implement components that enable users to configure the base currency - START
+    public static void onConfig() {
+        try {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Config Base currency");
+            dialog.setContentText("Base currency:");
+            dialog.setHeaderText(null);
+            dialog.setGraphic(null);
+            Optional<String> code = dialog.showAndWait();
+            if (code.isPresent()) {
+                Launcher.setBase(code.get().toUpperCase());
+                ArrayList<Currency> currencyList = new ArrayList<>();
+                for (Currency c : Launcher.getCurrencyList()) {
+                    List<CurrencyEntity> cList = FetchData.fetchRange(Launcher.getBase(), c.getShortcode(), 30);
+                    c.setHistorical(cList);
+                    c.setCurrency(cList.get(cList.size() - 1));
+                    currencyList.add(c);
+                }
+                Launcher.setCurrencyList(currencyList);
+                Launcher.refreshPane();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e) {}
+    }
+    // Design and implement components that enable users to configure the base currency - END
 }
