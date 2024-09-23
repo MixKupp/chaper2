@@ -50,4 +50,5 @@ public class Currency {
         this.isWatch = false;
         this.watchRate = 0.0;
     }
+
 }
